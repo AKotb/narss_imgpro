@@ -1,6 +1,6 @@
 from tkinter import Tk
 
-from imgpro.gui_handler import GUIHandler
+from app.imgpro.gui_handler import GUIHandler
 
 
 def print_welcome(name):

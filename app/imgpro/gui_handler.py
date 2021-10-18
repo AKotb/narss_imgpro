@@ -1,17 +1,26 @@
-from tkinter import Tk, Menu, messagebox
+from tkinter import Tk, Menu, messagebox, Frame, Label, StringVar, IntVar, Radiobutton, Button
+from tkinter import ttk
+from tkinter import filedialog as fd
+import numpy as np
+import matplotlib.pyplot as plt
+import rasterio
 
 
-class GUIHandler():
+class GUIHandler:
 
     def __init__(self, master=None):
         Tk.frame.__init__(self, master)
         self.master = master
+        self.selected_red_bnd = 1
+        self.selected_green_bnd = 1
+        self.selected_blue_bnd = 1
+        self.img_src = None
+        self.file_name = 'Input Image'
         self.init_window()
 
     def init_window(self):
         # window title in the title bar
         self.master.title("NARSS Image Processing Application")
-
         menubar = Menu(self.master)
         self.master.config(menu=menubar)
 
@@ -40,7 +49,106 @@ class GUIHandler():
         exit()
 
     def open(self):
-        print("Open Menu Item Pressed!")
+        filetypes = (
+            ('TIF Files', '*.tif'),
+            ('All Files', '*.*')
+        )
+        self.file_name = fd.askopenfilename(
+            title='Open File',
+            initialdir='/',
+            filetypes=filetypes)
+        self.img_src = rasterio.open(self.file_name)
+        self.open_multi_band_image(self.img_src)
+
+    def open_multi_band_image(self, img_src):
+        self.root = Tk()
+        self.root.title("RGB Band Selection")
+        self.root.geometry("500x300")
+        frame = Frame(self.root, width=500, height=300)
+        label_header = Label(frame, text="RGB Band Selection", font=("SansSerif", 16))
+        label_red = Label(frame, text="Red", font=("SansSerif", 14))
+        label_green = Label(frame, text="Green", font=("SansSerif", 14))
+        label_blue = Label(frame, text="Blue", font=("SansSerif", 14))
+        frame.pack()
+        label_header.pack()
+        label_header.place(x=150, y=20)
+        label_red.pack()
+        label_red.place(x=0, y=100)
+        label_green.pack()
+        label_green.place(x=0, y=150)
+        label_blue.pack()
+        label_blue.place(x=0, y=200)
+
+        bnd_lst = []
+        for band in range(img_src.count):
+            band += 1
+            bnd_lst.append(band)
+
+        band1_value = StringVar()
+        self.band_1 = ttk.Combobox(frame, textvariable=band1_value)
+        self.band_1.bind("<<ComboboxSelected>>", self.band1_value)
+        self.band_1['values'] = bnd_lst
+        self.band_1.current(0)
+        self.band_1.place(x=130, y=100)
+
+        band2_value = StringVar()
+        self.band_2 = ttk.Combobox(frame, textvariable=band2_value)
+        self.band_2.bind("<<ComboboxSelected>>", self.band2_value)
+        self.band_2['values'] = bnd_lst
+        self.band_2.current(0)
+        self.band_2.place(x=130, y=150)
+
+        band3_value = StringVar()
+        self.band_3 = ttk.Combobox(frame, textvariable=band3_value)
+        self.band_3.bind("<<ComboboxSelected>>", self.band3_value)
+        self.band_3['values'] = bnd_lst
+        self.band_3.current(0)
+        self.band_3.place(x=130, y=200)
+
+        view_btn = Button(frame, text="View", command=self.submit)
+        view_btn.pack()
+        view_btn.place(x=200, y=250)
+        cancel_btn = Button(frame, text="Cancel", command=self.cancel)
+        cancel_btn.pack()
+        cancel_btn.place(x=250, y=250)
+        self.root.mainloop()
+
+    def band1_value(self, event):
+        self.selected_red_bnd = self.band_1.get()
+
+    def band2_value(self, event):
+        self.selected_green_bnd = self.band_2.get()
+
+    def band3_value(self, event):
+        self.selected_blue_bnd = self.band_3.get()
+
+    def cancel(self):
+        self.root.destroy()
+
+    def submit(self):
+        # Read the grid values into numpy arrays
+        red = self.img_src.read(int(self.selected_red_bnd))
+        green = self.img_src.read(int(self.selected_green_bnd))
+        blue = self.img_src.read(int(self.selected_blue_bnd))
+
+        # Normalize the bands
+        redn = self.normalize(red)
+        greenn = self.normalize(green)
+        bluen = self.normalize(blue)
+
+        # Stack bands
+        rgb = np.dstack((redn, greenn, bluen))
+
+        # View the color composite
+        plt.get_current_fig_manager().set_window_title(self.file_name)
+        plt.imshow(rgb)
+        plt.axis('off')
+        plt.show()
+
+    # Normalize bands into 0.0 - 1.0 scale
+    def normalize(self, array):
+        array_min, array_max = array.min(), array.max()
+        return (array - array_min) / (array_max - array_min)
 
     def about(self):
         messagebox.showinfo("NARSS_IMGPro",
