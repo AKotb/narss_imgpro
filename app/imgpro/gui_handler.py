@@ -4,7 +4,8 @@ from tkinter import filedialog as fd
 import numpy as np
 import matplotlib.pyplot as plt
 import rasterio
-
+import geopandas
+import geoplot
 
 class GUIHandler:
 
@@ -26,7 +27,9 @@ class GUIHandler:
 
         # File Menu
         file_menu = Menu(menubar, tearoff=0)
-        file_menu.add_command(label="Open", command=self.open)
+        file_menu.add_command(label="Open Image", command=self.open_image)
+        file_menu.add_separator()
+        file_menu.add_command(label="Open Shapefile", command=self.open_shapefile)
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.exit)
         menubar.add_cascade(label="File", menu=file_menu)
@@ -48,14 +51,31 @@ class GUIHandler:
     def exit(self):
         exit()
 
-    def open(self):
+    def open_shapefile(self):
+        filetypes = (
+            ('TIF Files', '*.shp'),
+            ('All Files', '*.*')
+        )
+        file_name = fd.askopenfilename(
+            title='Open File',
+            #initialdir='/',
+            initialdir='D:/NARSS/Research_Project/2020-2022/Data',
+            filetypes=filetypes)
+        shapefile = geopandas.read_file(file_name)
+        fig, ax = plt.subplots(1, figsize=(10, 20))
+        shapefile.plot(column='Gov_Eng', cmap=None, ax=ax, legend=True, legend_kwds={'frameon': True, 'loc': 'lower left', 'title': 'Districts', 'fontsize': 8})
+        plt.get_current_fig_manager().set_window_title(file_name)
+        plt.show()
+
+    def open_image(self):
         filetypes = (
             ('TIF Files', '*.tif'),
             ('All Files', '*.*')
         )
         self.file_name = fd.askopenfilename(
             title='Open File',
-            initialdir='/',
+            #initialdir='/',
+            initialdir='D:/NARSS/Research_Project/2020-2022/Data',
             filetypes=filetypes)
         self.img_src = rasterio.open(self.file_name)
         self.open_multi_band_image(self.img_src)
