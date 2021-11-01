@@ -2,7 +2,6 @@ from tkinter import Tk
 
 from app.imgpro.gui_handler import GUIHandler
 
-# Main file
 
 def print_welcome(name):
     print(f'Welcome to , {name}')
