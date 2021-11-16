@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import rasterio
 import geopandas
 import geoplot
+from app.imgpro import extent_checker_interface
+from app.imgpro import histogram_generator_interface
+
 
 class GUIHandler:
 
@@ -42,6 +45,13 @@ class GUIHandler:
         process_menu.add_separator()
         process_menu.add_command(label="Process 3", command=self.process_1)
         menubar.add_cascade(label="Process", menu=process_menu)
+
+        # Process Menu
+        utility_menu = Menu(menubar, tearoff=0)
+        utility_menu.add_command(label="Extent Checker", command=self.extent_checker)
+        utility_menu.add_separator()
+        utility_menu.add_command(label="Histogram Generator", command=self.histogram_generator)
+        menubar.add_cascade(label="Utilities", menu=utility_menu)
 
         # Help Menu
         help_menu = Menu(menubar, tearoff=0)
@@ -187,4 +197,16 @@ class GUIHandler:
     def process_3(self):
         root = Tk()
         root.geometry("650x250")
+        root.mainloop()
+
+    def extent_checker(self):
+        root = Tk()
+        root.geometry("650x250")
+        extent_checker_interface.ExtentCheckerInterface(root)
+        root.mainloop()
+
+    def histogram_generator(self):
+        root = Tk()
+        root.geometry("650x250")
+        histogram_generator_interface.HistogramGeneratorInterface(root)
         root.mainloop()

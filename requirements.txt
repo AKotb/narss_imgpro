@@ -13,3 +13,4 @@ Cartopy~=0.20.1
 scipy~=1.7.1
 scikit_learn~=1.0
 geoplot~=0.4.4
+GDAL~=3.3.3
