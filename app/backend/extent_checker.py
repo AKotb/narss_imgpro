@@ -30,11 +30,11 @@ class ExtentChecker:
         layer = vector.GetLayer()
         feature = layer.GetFeature(0)
         vectorGeometry = feature.GetGeometryRef()
-        ext = self.GetExtent(raster)
+        ext = self.get_extent(raster)
         src_srs = osr.SpatialReference()
         src_srs.ImportFromWkt(raster.GetProjection())
         tgt_srs = src_srs.CloneGeogCS()
-        geo_ext = self.ReprojectCoords(ext, src_srs, tgt_srs)
+        geo_ext = self.reproject_coords(ext, src_srs, tgt_srs)
         print(geo_ext)
         print(rasterGeometry.Intersect(vectorGeometry))
         print("xLeft =", xLeft)
@@ -65,7 +65,7 @@ class ExtentChecker:
         else:
             print("partially inside")
 
-    def GetExtent(self, raster):
+    def get_extent(self, raster):
         """ Return list of corner coordinates from a gdal Dataset """
         xmin, xpixel, _, ymax, _, ypixel = raster.GetGeoTransform()
         width, height = raster.RasterXSize, raster.RasterYSize
@@ -73,7 +73,7 @@ class ExtentChecker:
         ymin = ymax + height * ypixel
         return (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)
 
-    def ReprojectCoords(self, coords, src_srs, tgt_srs):
+    def reproject_coords(self, coords, src_srs, tgt_srs):
         """ Reproject a list of x,y coordinates. """
         trans_coords = []
         transform = osr.CoordinateTransformation(src_srs, tgt_srs)

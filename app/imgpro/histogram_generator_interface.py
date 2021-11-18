@@ -1,8 +1,8 @@
-from tkinter import Tk
-from tkinter import filedialog as fd
+from tkinter import *
+from tkinter import ttk
 from osgeo import ogr
 from osgeo import gdal
-from app.backend import extent_checker
+from tkinter import filedialog as fd
 
 
 class HistogramGeneratorInterface:
@@ -10,38 +10,42 @@ class HistogramGeneratorInterface:
         Tk.frame.__init__(self, master)
         self.master = master
         self.image_file_name = None
-        self.shpfile_file_name = None
+        self.stretch_type_value = None
+        self.input_image_txt_field = None
         self.init_window()
 
     def init_window(self):
         # window title in the title bar
-        self.master.title("Extent Checker")
+        self.master.title("Histogram Generator")
 
         # window title label
-        window_lbl = Tk.Label(self.master, text="Extent Checker")
+        window_lbl = Label(self.master, text="Histogram Generator")
         window_lbl.grid(padx=10, pady=10, row=0, column=0, columnspan=3)
 
         # Open raster image
-        input_image_lbl = Tk.Label(self.master, text="Image")
+        input_image_lbl = Label(self.master, text="Image")
         input_image_lbl.grid(sticky='W', padx=10, pady=10, row=1, column=0)
-        input_image_txt_field = Tk.Text(self.master, height=1, width=50)
-        input_image_txt_field.grid(sticky='W', padx=10, pady=10, row=1, column=1, columnspan=2)
-        input_image_btn = Tk.Button(self.master, text="Browse", command=self.select_image)
+        self.input_image_txt_field = Text(self.master, height=1, width=50)
+        self.input_image_txt_field.grid(sticky='W', padx=10, pady=10, row=1, column=1, columnspan=2)
+        input_image_btn = Button(self.master, text="Browse", command=self.select_image)
         input_image_btn.grid(sticky='W', padx=10, pady=10, row=1, column=3)
 
-        # Open ShapeFile
-        input_shpfile_lbl = Tk.Label(self.master, text="ShapeFile")
-        input_shpfile_lbl.grid(sticky='W', padx=10, pady=10, row=2, column=0)
-        input_shpfile_txt_field = Tk.Text(self.master, height=1, width=50)
-        input_shpfile_txt_field.grid(sticky='W', padx=10, pady=10, row=2, column=1, columnspan=2)
-        input_shpfile_btn = Tk.Button(self.master, text="Browse", command=self.select_shapefile)
-        input_shpfile_btn.grid(sticky='W', padx=10, pady=10, row=2, column=3)
+        # Select Stretch Type
+        input_stretchtype_lbl = Label(self.master, text="Stretch Type")
+        input_stretchtype_lbl.grid(sticky='W', padx=10, pady=10, row=2, column=0)
+        stretch_type_lst = ['Select', 'Contrast', 'Standard Deviations', 'Adaptive', 'Histogram Equalization', 'Min/Max']
+        self.stretch_type_value = StringVar()
+        self.stretch_type = ttk.Combobox(self.master, textvariable=self.stretch_type_value)
+        self.stretch_type.bind("<<ComboboxSelected>>", self.stretch_type_value)
+        self.stretch_type['values'] = stretch_type_lst
+        self.stretch_type.current(0)
+        self.stretch_type.grid(sticky='W', padx=10, pady=10, row=2, column=1, columnspan=2)
 
         # Control Buttons
-        self.check_extent_btn = Tk.Button(self.master, text="Check", command=self.check_extent)
-        self.check_extent_btn.grid(sticky='E', padx=10, pady=10, row=3, column=1)
-        self.cancel_btn = Tk.Button(self.master, text="Cancel", command=self.exit)
-        self.cancel_btn.grid(sticky='W', padx=10, pady=10, row=3, column=2)
+        self.display_histogram_btn = Button(self.master, text="Show", command=self.display_histogram)
+        self.display_histogram_btn.grid(sticky='E', padx=10, pady=10, row=4, column=1)
+        self.cancel_btn = Button(self.master, text="Cancel", command=self.exit)
+        self.cancel_btn.grid(sticky='W', padx=10, pady=10, row=4, column=2)
 
     def exit(self):
         self.master.destroy()
@@ -53,24 +57,12 @@ class HistogramGeneratorInterface:
         )
         self.image_file_name = fd.askopenfilename(
             title='Open File',
-            initialdir='/',
+            #initialdir='/',
+            initialdir='D:/NARSS/Research_Project/2020-2022/Data/Extent_Checker_Data',
             filetypes=filetypes)
-        self.input_image_txt_field.delete(1.0, Tk.END)
-        self.input_image_txt_field.insert(Tk.END, self.image_file_name)
+        self.input_image_txt_field.delete(1.0, END)
+        self.input_image_txt_field.insert(END, self.image_file_name)
 
-    def select_shapefile(self):
-        filetypes = (
-            ('TIF Files', '*.shp'),
-            ('All Files', '*.*')
-        )
-        self.shpfile_file_name = fd.askopenfilename(
-            title='Open File',
-            initialdir='/',
-            filetypes=filetypes)
-        self.input_shpfile_txt_field.delete(1.0, Tk.END)
-        self.input_shpfile_txt_field.insert(Tk.END, self.shpfile_file_name)
-
-    def check_extent(self):
-        raster_image = gdal.Open(self.image_file_name)
-        shapefile = ogr.Open(self.shpfile_name)
-        ans = extent_checker.func(raster_image, shapefile)
+    def display_histogram(self):
+        print(self.image_file_name)
+        print(self.stretch_type_value)
