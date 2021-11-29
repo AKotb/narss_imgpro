@@ -1,5 +1,6 @@
 from osgeo import ogr
 from osgeo import osr
+from tkinter import messagebox
 
 
 class ExtentChecker:
@@ -35,13 +36,6 @@ class ExtentChecker:
         src_srs.ImportFromWkt(raster.GetProjection())
         tgt_srs = src_srs.CloneGeogCS()
         geo_ext = self.reproject_coords(ext, src_srs, tgt_srs)
-        print(geo_ext)
-        print(rasterGeometry.Intersect(vectorGeometry))
-        print("xLeft =", xLeft)
-        print("yTop =", yTop)
-        print("xRight =", xRight)
-        print("yBottom =", yBottom)
-
         layer = vector.GetLayer(0)
         for i in range(layer.GetFeatureCount()):
             feature = layer.GetFeature(i)
@@ -51,19 +45,15 @@ class ExtentChecker:
             vxmax = extent[1]
             vymin = extent[2]
             vymax = extent[3]
-        print("vxmin =", vxmin)
-        print("vxmax =", vxmax)
-        print("vymin =", vymin)
-        print("vymax =", vymax)
 
         if vxmin >= xLeft and vxmax <= xRight and vymin >= yBottom and vymax <= yTop:
-            print("inside")
+            messagebox.showinfo("NARSS_IMGPro", "                [INSIDE]                  ")
         elif (vxmin - xLeft) < 0.05 and (vxmax - xRight) < 0.05 and (vymin - yBottom) < 0.05 and (vymax - yTop) < 0.05:
-            print("identical")
+            messagebox.showinfo("NARSS_IMGPro", "                [IDENTICAL]               ")
         elif vxmin > xRight or vxmax < xLeft or vymin > yTop or vymax < yBottom:
-            print("outside")
+            messagebox.showinfo("NARSS_IMGPro", "                [OUTSIDE]                 ")
         else:
-            print("partially inside")
+            messagebox.showinfo("NARSS_IMGPro", "               [PARTIALLY INSIDE]         ")
 
     def get_extent(self, raster):
         """ Return list of corner coordinates from a gdal Dataset """
