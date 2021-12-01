@@ -79,4 +79,4 @@ class ExtentCheckerInterface(Frame):
         raster_image = gdal.Open(self.image_file_name)
         shapefile = ogr.Open(self.shpfile_file_name)
         extent_checker_obj = extent_checker.ExtentChecker()
-        ans = extent_checker_obj.func(raster_image, shapefile)
+        extent_checker_obj.func(raster_image, shapefile)

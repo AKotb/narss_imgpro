@@ -1,11 +1,12 @@
 from tkinter import *
-from tkinter import ttk
-from osgeo import ogr
-from osgeo import gdal
 from tkinter import filedialog as fd
+from tkinter import ttk
+
+from app.backend import histogram
 
 
-class HistogramGeneratorInterface:
+class HistogramGeneratorInterface(Frame):
+
     def __init__(self, master=None):
         Tk.frame.__init__(self, master)
         self.master = master
@@ -33,12 +34,12 @@ class HistogramGeneratorInterface:
         # Select Stretch Type
         input_stretchtype_lbl = Label(self.master, text="Stretch Type")
         input_stretchtype_lbl.grid(sticky='W', padx=10, pady=10, row=2, column=0)
-        stretch_type_lst = ['Select', 'Contrast', 'Standard Deviations', 'Adaptive', 'Histogram Equalization', 'Min/Max']
-        self.stretch_type_value = StringVar()
-        self.stretch_type = ttk.Combobox(self.master, textvariable=self.stretch_type_value)
-        self.stretch_type.bind("<<ComboboxSelected>>", self.stretch_type_value)
-        self.stretch_type['values'] = stretch_type_lst
+        stretch_type_value = StringVar()
+        self.stretch_type = ttk.Combobox(self.master, width=30, textvariable=stretch_type_value)
+        self.stretch_type['values'] = ['Select', 'Contrast Stretching', 'Gamma Corrected', 'Standard Deviation',
+                                       'Adaptive Equalization', 'Histogram Equalization']
         self.stretch_type.current(0)
+        self.stretch_type.bind("<<ComboboxSelected>>", self.stretch_type_changed)
         self.stretch_type.grid(sticky='W', padx=10, pady=10, row=2, column=1, columnspan=2)
 
         # Control Buttons
@@ -57,8 +58,8 @@ class HistogramGeneratorInterface:
         )
         self.image_file_name = fd.askopenfilename(
             title='Open File',
-            #initialdir='/',
-            initialdir='D:/NARSS/Research_Project/2020-2022/Data/Extent_Checker_Data',
+            # initialdir='/',
+            initialdir='D:/Work/NARSS/Research Project/2020-2022/Histogram_Data',
             filetypes=filetypes)
         self.input_image_txt_field.delete(1.0, END)
         self.input_image_txt_field.insert(END, self.image_file_name)
@@ -66,3 +67,9 @@ class HistogramGeneratorInterface:
     def display_histogram(self):
         print(self.image_file_name)
         print(self.stretch_type_value)
+        histogram_obj = histogram.Histogram()
+        histogram_obj.his(self.image_file_name, self.stretch_type_value)
+
+    def stretch_type_changed(self, event):
+        """ handle the stretch changed event """
+        self.stretch_type_value = self.stretch_type.get()
