@@ -1,10 +1,5 @@
 from tkinter import Tk
-
 from app.imgpro.gui_handler import GUIHandler
-
-
-def print_welcome(name):
-    print(f'Welcome to , {name}')
 
 
 def main():
@@ -15,17 +10,4 @@ def main():
 
 
 if __name__ == '__main__':
-    print_welcome('NARSS Image Processing App')
     main()
-
-
-
-
-
-
-
-
-
-
-
-

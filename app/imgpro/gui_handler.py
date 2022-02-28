@@ -1,13 +1,15 @@
-from tkinter import Tk, Menu, messagebox, Frame, Label, StringVar, IntVar, Radiobutton, Button
-from tkinter import ttk
-from tkinter import filedialog as fd
+
 import numpy as np
 import matplotlib.pyplot as plt
 import rasterio
 import geopandas
 import geoplot
+from tkinter import Tk, Menu, messagebox, Frame, Label, StringVar, IntVar, Radiobutton, Button
+from tkinter import ttk
+from tkinter import filedialog as fd
 from app.imgpro import extent_checker_interface
 from app.imgpro import histogram_generator_interface
+from app.imgpro import ml_classification_interface
 
 
 class GUIHandler:
@@ -39,11 +41,11 @@ class GUIHandler:
 
         # Process Menu
         process_menu = Menu(menubar, tearoff=0)
-        process_menu.add_command(label="Process 1", command=self.process_1)
+        process_menu.add_command(label="ML Classification", command=self.ml_classification)
         process_menu.add_separator()
-        process_menu.add_command(label="Process 2", command=self.process_1)
+        process_menu.add_command(label="DL Classification", command=self.dl_classification)
         process_menu.add_separator()
-        process_menu.add_command(label="Process 3", command=self.process_1)
+        process_menu.add_command(label="DL Change Detection", command=self.dl_change_detection)
         menubar.add_cascade(label="Process", menu=process_menu)
 
         # Process Menu
@@ -184,17 +186,18 @@ class GUIHandler:
         messagebox.showinfo("NARSS_IMGPro",
                             "NARSS Image Processing Application [version 0.1]")
 
-    def process_1(self):
+    def ml_classification(self):
+        root = Tk()
+        root.geometry("650x250")
+        ml_classification_interface.MLClassificationInterface(root)
+        root.mainloop()
+
+    def dl_classification(self):
         root = Tk()
         root.geometry("650x250")
         root.mainloop()
 
-    def process_2(self):
-        root = Tk()
-        root.geometry("650x250")
-        root.mainloop()
-
-    def process_3(self):
+    def dl_change_detection(self):
         root = Tk()
         root.geometry("650x250")
         root.mainloop()
