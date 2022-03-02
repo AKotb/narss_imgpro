@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog as fd
 from tkinter import ttk
 
-from app.backend import histogram
+from backend import histogram
 
 
 class HistogramGeneratorInterface(Frame):

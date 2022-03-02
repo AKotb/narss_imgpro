@@ -1,5 +1,5 @@
 from tkinter import Tk
-from app.imgpro.gui_handler import GUIHandler
+from imgpro.gui_handler import GUIHandler
 
 
 def main():

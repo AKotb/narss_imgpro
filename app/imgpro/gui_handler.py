@@ -7,9 +7,9 @@ import geoplot
 from tkinter import Tk, Menu, messagebox, Frame, Label, StringVar, IntVar, Radiobutton, Button
 from tkinter import ttk
 from tkinter import filedialog as fd
-from app.imgpro import extent_checker_interface
-from app.imgpro import histogram_generator_interface
-from app.imgpro import ml_classification_interface
+from imgpro import extent_checker_interface
+from imgpro import histogram_generator_interface
+from imgpro import ml_classification_interface
 
 
 class GUIHandler:

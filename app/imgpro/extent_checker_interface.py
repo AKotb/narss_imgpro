@@ -1,7 +1,7 @@
 from tkinter import *
 from osgeo import ogr
 from osgeo import gdal
-from app.backend import extent_checker
+from backend import extent_checker
 from tkinter import filedialog as fd
 
 
