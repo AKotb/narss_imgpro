@@ -1,8 +1,9 @@
 from tkinter import *
-from osgeo import ogr
-from osgeo import gdal
-from backend import extent_checker
 from tkinter import filedialog as fd
+
+from backend import extent_checker
+from osgeo import gdal
+from osgeo import ogr
 
 
 class ExtentCheckerInterface(Frame):
@@ -56,7 +57,7 @@ class ExtentCheckerInterface(Frame):
         )
         self.image_file_name = fd.askopenfilename(
             title='Open File',
-            #initialdir='/',
+            # initialdir='/',
             initialdir='D:/NARSS/Research_Project/2020-2022/Data/Extent_Checker_Data',
             filetypes=filetypes)
         self.input_image_txt_field.delete(1.0, END)
@@ -69,7 +70,7 @@ class ExtentCheckerInterface(Frame):
         )
         self.shpfile_file_name = fd.askopenfilename(
             title='Open File',
-            #initialdir='/',
+            # initialdir='/',
             initialdir='D:/NARSS/Research_Project/2020-2022/Data/Extent_Checker_Data',
             filetypes=filetypes)
         self.input_shpfile_txt_field.delete(1.0, END)

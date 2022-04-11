@@ -1,6 +1,7 @@
+from tkinter import messagebox
+
 from osgeo import ogr
 from osgeo import osr
-from tkinter import messagebox
 
 
 class ExtentChecker:

@@ -18,3 +18,6 @@ scikit-image~=0.18.3
 basemap~=1.3.1
 netCDF4~=1.5.8
 contextily~=1.2.0
+tkintermapview~=1.3
+PyQt5~=5.15.6
+PyQtWebEngine~=5.15.5

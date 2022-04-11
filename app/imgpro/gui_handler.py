@@ -1,12 +1,11 @@
-
-import numpy as np
-import matplotlib.pyplot as plt
-import rasterio
-import geopandas
-import geoplot
-from tkinter import Tk, Menu, messagebox, Frame, Label, StringVar, IntVar, Radiobutton, Button
-from tkinter import ttk
+from tkinter import Tk, Menu, messagebox, Frame, Label, StringVar, Button
 from tkinter import filedialog as fd
+from tkinter import ttk
+
+import geopandas
+import matplotlib.pyplot as plt
+import numpy as np
+import rasterio
 from imgpro import extent_checker_interface
 from imgpro import histogram_generator_interface
 from imgpro import ml_classification_interface
@@ -70,12 +69,13 @@ class GUIHandler:
         )
         file_name = fd.askopenfilename(
             title='Open File',
-            #initialdir='/',
+            # initialdir='/',
             initialdir='D:/NARSS/Research_Project/2020-2022/Data',
             filetypes=filetypes)
         shapefile = geopandas.read_file(file_name)
         fig, ax = plt.subplots(1, figsize=(10, 20))
-        shapefile.plot(column='Gov_Eng', cmap=None, ax=ax, legend=True, legend_kwds={'frameon': True, 'loc': 'lower left', 'title': 'Districts', 'fontsize': 8})
+        shapefile.plot(column='Gov_Eng', cmap=None, ax=ax, legend=True,
+                       legend_kwds={'frameon': True, 'loc': 'lower left', 'title': 'Districts', 'fontsize': 8})
         plt.get_current_fig_manager().set_window_title(file_name)
         plt.show()
 
@@ -86,7 +86,7 @@ class GUIHandler:
         )
         self.file_name = fd.askopenfilename(
             title='Open File',
-            #initialdir='/',
+            # initialdir='/',
             initialdir='D:/NARSS/Research_Project/2020-2022/Data',
             filetypes=filetypes)
         self.img_src = rasterio.open(self.file_name)
@@ -188,7 +188,7 @@ class GUIHandler:
 
     def ml_classification(self):
         root = Tk()
-        root.geometry("650x250")
+        root.geometry("675x425")
         ml_classification_interface.MLClassificationInterface(root)
         root.mainloop()
 
