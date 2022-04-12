@@ -44,7 +44,7 @@ class GUIHandler:
         process_menu.add_separator()
         process_menu.add_command(label="DL Classification", command=self.dl_classification)
         process_menu.add_separator()
-        process_menu.add_command(label="DL Change Detection", command=self.dl_change_detection)
+        process_menu.add_command(label="ML Change Detection", command=self.ml_change_detection)
         menubar.add_cascade(label="Process", menu=process_menu)
 
         # Process Menu
@@ -197,7 +197,7 @@ class GUIHandler:
         root.geometry("650x250")
         root.mainloop()
 
-    def dl_change_detection(self):
+    def ml_change_detection(self):
         root = Tk()
         root.geometry("650x250")
         root.mainloop()

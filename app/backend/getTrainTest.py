@@ -3,6 +3,8 @@ import os
 import numpy as np
 from osgeo import gdal
 
+#from writetif import report_and_exit
+
 
 def create_mask_from_vector(vector_data_path, cols, rows, geo_transform, projection, target_value=1,
                             output_fname='', dataset_format='MEM'):
